@@ -20,7 +20,6 @@ jobs:
 
     - name: Install System Requirements
       run: |
-        # Tell the server to ignore broken external repositories and force install fluidsynth
         sudo rm -f /etc/apt/sources.list.d/microsoft-prod.list
         sudo rm -f /etc/apt/sources.list.d/azure-cli.list
         sudo apt-get update --allow-releaseinfo-change || true
@@ -29,7 +28,14 @@ jobs:
     - name: Install AI Libraries
       run: |
         pip install --upgrade pip
-        pip install oemer music21
+        # Install libraries quietly to prevent log truncation
+        pip install -q oemer music21
+
+    - name: Pre-download AI Weights Cleanly
+      run: |
+        # Manually fetch the AI model weights quietly so it doesn't flood the terminal screen
+        mkdir -p ~/.oemer
+        wget -q -O ~/.oemer/1st_weights.h5 "https://github.com/Brossard/oemer/releases/download/v0.1.0/1st_weights.h5" || true
 
     - name: Run Converter Script
       run: python converter.py
