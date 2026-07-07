@@ -6,7 +6,7 @@ from music21 import converter
 image_extensions = ('.png', '.jpg', '*.jpeg')
 image_files = []
 for ext in image_extensions:
-image_files.extend(glob.glob(ext))
+    image_files.extend(glob.glob(ext))
 
 if not image_files:
 print("❌ Error: No sheet music image file found in the repository folder!")
