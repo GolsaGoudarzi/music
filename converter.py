@@ -9,8 +9,8 @@ for ext in image_extensions:
     image_files.extend(glob.glob(ext))
 
 if not image_files:
-print("❌ Error: No sheet music image file found in the repository folder!")
-exit(1)
+    print("❌ Error: No sheet music image file found in the repository folder!")
+    exit(1)
 
 Grab the first image found
 image_file = image_files[0]
