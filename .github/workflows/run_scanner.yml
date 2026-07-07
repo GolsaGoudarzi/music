@@ -28,14 +28,7 @@ jobs:
     - name: Install AI Libraries
       run: |
         pip install --upgrade pip
-        # Install libraries quietly to prevent log truncation
-        pip install -q oemer music21
-
-    - name: Pre-download AI Weights Cleanly
-      run: |
-        # Manually fetch the AI model weights quietly so it doesn't flood the terminal screen
-        mkdir -p ~/.oemer
-        wget -q -O ~/.oemer/1st_weights.h5 "https://github.com/Brossard/oemer/releases/download/v0.1.0/1st_weights.h5" || true
+        pip install oemer music21
 
     - name: Run Converter Script
       run: python converter.py
