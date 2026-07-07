@@ -1,6 +1,7 @@
 import os
 import glob
 import subprocess
+import sys
 from music21 import converter
 
 # Find any image file uploaded to the repository
@@ -13,12 +14,33 @@ if not image_files:
     print("❌ Error: No sheet music image file found in the repository folder!")
     exit(1)
 
-# Grab the first image found
 image_file = image_files[0]
 print(f"🎵 Found sheet music file: {image_file}")
 
-print("Step 1: AI is visually scanning your sheet music... (This takes about a minute)")
-subprocess.run(["oemer", image_file], check=True)
+print("Step 1: AI is visually scanning your sheet music... (Muting download spam, please wait)")
+
+# Run oemer but intercept the output to filter out the progress bar spam
+process = subprocess.Popen(
+    ["oemer", image_file], 
+    stdout=subprocess.PIPE, 
+    stderr=subprocess.STDOUT, 
+    text=True
+)
+
+# Read the logs line by line as they happen
+for line in process.stdout:
+    # 🛑 IF THE LINE CONTAINS A PERCENTAGE SIGN, DO NOT PRINT IT!
+    if "%" in line or "Downloading" in line:
+        continue
+    # Print the clean status updates only
+    sys.stdout.write(line)
+    sys.stdout.flush()
+
+process.wait()
+
+if process.returncode != 0:
+    print(f"❌ AI scanning failed with exit code {process.returncode}")
+    exit(process.returncode)
 
 xml_filename = image_file.rsplit('.', 1)[0] + ".musicxml"
 
