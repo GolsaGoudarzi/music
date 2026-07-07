@@ -2,7 +2,7 @@ import os
 import glob
 from music21 import converter
 
-Find any image file uploaded to the repository
+# Find any image file uploaded to the repository
 image_extensions = ('.png', '.jpg', '*.jpeg')
 image_files = []
 for ext in image_extensions:
